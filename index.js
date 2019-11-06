@@ -46,12 +46,31 @@ server.get(`/api/users/:id`, (req, res) => {
     })
 })
 
-// server.put(`/api/users/:id`, (req, res) => {
-//   db.update(req.id, req.body)
-//     .then(user => {
-//       res.status(200).json({succes: true, user})
-//     })
-//     .catch => (err => {
-      
-//     })
-// })
+server.delete("/api/users/:id", (req, res) => {
+  db.remove(req.params.id)
+    .then(user => {
+      if (user) {
+        res.status(200).json({success: true, message: "user deleted"})
+      } else {
+        res.status(404).json({success: false, message: "The user with the specified ID does not exist."})
+      }
+    })
+    .catch(err => {
+      res.status(500).json({success: false, massage: "server error"})
+    })
+    
+})
+
+server.put(`/api/users/:id`, (req, res) => {
+  db.update(req.params.id, req.body)
+    .then(user => {
+      if (user) {
+        res.status(200).json({succes: true, user})
+      } else {
+        res.status(404).json({success: false, message: "The user with the specified ID does not exist."})
+      }
+    })
+    .catch(err => {
+      res.status(500).json({success: false, massage: "server error"})
+    })
+})
